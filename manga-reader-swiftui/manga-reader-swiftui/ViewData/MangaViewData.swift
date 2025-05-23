@@ -7,7 +7,8 @@
 
 import Foundation
 
-struct MangaViewData {
+struct MangaViewData: Hashable {
+    let id: String
     let title: String
     let description: String
     let coverId: String?
@@ -15,13 +16,14 @@ struct MangaViewData {
     let contentRating: String?
 }
 
-struct TagsViewData {
+struct TagsViewData: Hashable {
     let title: String
 }
 
 extension MangaViewData {
-    static func makeMock() -> MangaViewData {
+    static func makeMock(id: String = "test") -> MangaViewData {
         MangaViewData(
+            id: id,
             title: "test",
             description: "here is a test description",
             coverId: nil,

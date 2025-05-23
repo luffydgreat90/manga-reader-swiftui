@@ -60,7 +60,8 @@ enum MangaMapper {
             let coverId = manga.relationships.filter({ $0.type == "cover_art" }).first?.id
             let tags = manga.attributes.tags.map { TagsViewData(title: $0.attributes.name.en ?? "" )}
 
-            return MangaViewData(title: manga.attributes.title.en ?? "",
+            return MangaViewData(id: manga.id,
+                                 title: manga.attributes.title.en ?? "",
                                  description: manga.attributes.description.en ?? "",
                                  coverId: coverId,
                                  tags: tags,

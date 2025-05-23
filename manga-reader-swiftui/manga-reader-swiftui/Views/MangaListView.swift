@@ -8,13 +8,22 @@
 import SwiftUI
 
 struct MangaListView: View {
+    @State private var searchText = ""
+    var items: [MangaViewData]
+
     var body: some View {
-        ScrollView(.vertical) {
-            
-        }
+        NavigationView {
+                    List(items, id: \.self) { item in
+                        MangaCellView(mangaViewData: item)
+                            .listRowSeparator(.hidden)
+                    }
+                    .navigationTitle("Fruits")
+                    .searchable(text: $searchText, placement: .navigationBarDrawer(displayMode: .automatic))
+                    .scrollContentBackground(.hidden)
+                }
     }
 }
 
 #Preview {
-    MangaListView()
+    MangaListView(items: [MangaViewData.makeMock(), MangaViewData.makeMock(id: "test1")])
 }

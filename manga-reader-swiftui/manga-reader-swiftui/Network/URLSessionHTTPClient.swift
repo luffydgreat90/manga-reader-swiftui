@@ -8,7 +8,7 @@
 import Foundation
 
 protocol URLSessionProtocol {
-    func get(from url:URL?) async throws -> URLResult
+    func get(from url: URL?) async throws -> URLResult
 }
 
 typealias URLResult = (Data, HTTPURLResponse)
@@ -25,7 +25,7 @@ final class URLSessionHTTPClient: URLSessionProtocol {
         case failed
     }
 
-    func get(from url:URL?) async throws -> URLResult {
+    func get(from url: URL?) async throws -> URLResult {
         guard let url else {
             throw LoadError.invalidURL
         }
@@ -36,6 +36,6 @@ final class URLSessionHTTPClient: URLSessionProtocol {
             throw LoadError.failed
         }
 
-        return( result.0,  response)
+        return( result.0, response)
     }
 }
