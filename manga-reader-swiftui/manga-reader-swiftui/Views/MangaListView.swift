@@ -9,11 +9,11 @@ import SwiftUI
 
 struct MangaListView: View {
     @State private var searchText = ""
-    var items: [MangaViewData]
+    var mangaObservable: MangaObservable
 
     var body: some View {
         NavigationView {
-                    List(items, id: \.self) { item in
+            List(mangaObservable.mangViewDatas, id: \.self) { item in
                         MangaCellView(mangaViewData: item)
                             .listRowSeparator(.hidden)
                     }
@@ -25,5 +25,5 @@ struct MangaListView: View {
 }
 
 #Preview {
-    MangaListView(items: [MangaViewData.makeMock(), MangaViewData.makeMock(id: "test1")])
+    MangaListView(mangaObservable: MangaObservable(mangViewDatas: [MangaViewData.makeMock(), MangaViewData.makeMock(id: "test1")]))
 }

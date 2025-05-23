@@ -21,9 +21,11 @@ struct MangaReaderApp: App {
                      baseURL: baseURL)
     }()
 
+    private var mangaObserVable: MangaObservable = MangaObservable()
+
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            MangaListView(mangaObserVable: mangaObserVable)
         }
     }
 }
