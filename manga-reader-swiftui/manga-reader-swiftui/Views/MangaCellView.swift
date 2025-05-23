@@ -7,4 +7,30 @@
 
 import SwiftUI
 
+struct MangaCellView: View {
+    let mangaViewData: MangaViewData
 
+    var body: some View {
+        HStack {
+            VStack(alignment: .leading, spacing: 4) {
+                Text(mangaViewData.title)
+                    .font(.title2.bold())
+                    .foregroundStyle(.white)
+                
+                Text(mangaViewData.description)
+                    .font(.subheadline)
+                    .foregroundStyle(.white)
+            }
+
+        }.padding()
+            .frame(minWidth: 0,
+                   maxWidth: .infinity)
+            .background(.black.gradient)
+            .clipShape(.rect(cornerRadius:  10))
+            .padding()
+    }
+}
+
+#Preview {
+    MangaCellView(mangaViewData: MangaViewData.makeMock())
+}

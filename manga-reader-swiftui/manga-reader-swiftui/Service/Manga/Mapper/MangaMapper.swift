@@ -57,13 +57,12 @@ enum MangaMapper {
         }
 
         return result.data.map { manga in
-            let cover = manga.relationships.filter({ $0.type == "cover_art" }).first?.id ?? ""
-            let url = "https://uploads.mangadex.org/covers/\(manga.id)/\(cover)"
+            let coverId = manga.relationships.filter({ $0.type == "cover_art" }).first?.id
             let tags = manga.attributes.tags.map { TagsViewData(title: $0.attributes.name.en ?? "" )}
 
             return MangaViewData(title: manga.attributes.title.en ?? "",
                                  description: manga.attributes.description.en ?? "",
-                                 cover: URL(string: url),
+                                 coverId: coverId,
                                  tags: tags,
                                  contentRating: manga.attributes.contentRating)
         }

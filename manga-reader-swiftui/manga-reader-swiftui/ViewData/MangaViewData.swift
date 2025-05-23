@@ -10,11 +10,23 @@ import Foundation
 struct MangaViewData {
     let title: String
     let description: String
-    let cover: URL?
+    let coverId: String?
     let tags: [TagsViewData]
     let contentRating: String?
 }
 
 struct TagsViewData {
     let title: String
+}
+
+extension MangaViewData {
+    static func makeMock() -> MangaViewData {
+        MangaViewData(
+            title: "test",
+            description: "here is a test description",
+            coverId: nil,
+            tags: [],
+            contentRating: "test"
+        )
+    }
 }
