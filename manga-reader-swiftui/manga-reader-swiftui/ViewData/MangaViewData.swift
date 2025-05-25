@@ -21,10 +21,10 @@ struct TagsViewData: Hashable {
 }
 
 extension MangaViewData {
-    static func makeMock(id: String = "test") -> MangaViewData {
+    static func makeMock(id: String = "test", title: String = "test") -> MangaViewData {
         MangaViewData(
             id: id,
-            title: "test",
+            title: title,
             description: "here is a test description",
             coverId: nil,
             tags: [],

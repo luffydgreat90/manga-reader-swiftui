@@ -17,7 +17,6 @@ final class MangaService {
     private let urlSession: URLSessionProtocol
     private let baseURL: URL
     private(set) var mangaViewDatas: [MangaViewData] = []
-    var query: String = ""
 
     init(urlSession: URLSessionProtocol,
          baseURL: URL,
@@ -27,8 +26,8 @@ final class MangaService {
         self.mangaViewDatas = mangaViewDatas
     }
 
-    func searchManga() async throws {
-        let result = try await urlSession.get(from: MangaEndPoint.get(search: query).url(baseURL: baseURL))
+    func searchManga(search: String) async throws {
+        let result = try await urlSession.get(from: MangaEndPoint.get(search: search).url(baseURL: baseURL))
 
         mangaViewDatas = try MangaMapper.map(data: result.0, httpResponse: result.1)
     }

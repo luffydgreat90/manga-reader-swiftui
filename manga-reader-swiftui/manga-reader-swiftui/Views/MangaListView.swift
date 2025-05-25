@@ -8,9 +8,11 @@
 import SwiftUI
 import Observation
 
+@MainActor
 struct MangaListView: View {
-    var mangaService: MangaService
+    @Bindable var mangaService: MangaService
     @State var query: String = ""
+    @State private var task: Task<Void, Never>?
 
     var body: some View {
         NavigationView {
@@ -25,13 +27,24 @@ struct MangaListView: View {
                     }
                     .navigationTitle("MangaDex")
                     .listStyle(PlainListStyle())
-                    .searchable(text: $query, placement: .navigationBarDrawer(displayMode: .automatic))
+                    .searchable(text: $query)
+                    .onChange(of: query, { _, newValue in
+                        searchManga(query:newValue)
+                    })
                     .scrollContentBackground(.hidden)
 
 
         }.task {
+            searchManga(query: "")
+        }
+    }
+
+    private func searchManga(query: String) {
+        task?.cancel()
+        task = Task {
+            try? await Task.sleep(nanoseconds: 300_000_000)
             do {
-                try await mangaService.searchManga()
+                try await mangaService.searchManga(search: query)
             } catch {
 
             }
@@ -46,7 +59,7 @@ struct MangaListView: View {
             urlSession: URLSessionHTTPClient(session: .shared),
             baseURL: URL(string: "test")!,
             mangaViewDatas: [MangaViewData.makeMock(id: "test1"),
-                             MangaViewData.makeMock(id: "test2")]
+                             MangaViewData.makeMock(id: "test2", title: "one piece")]
         )
     )
 }
