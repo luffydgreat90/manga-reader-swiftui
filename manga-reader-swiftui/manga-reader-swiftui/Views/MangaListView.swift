@@ -6,24 +6,47 @@
 //
 
 import SwiftUI
+import Observation
 
 struct MangaListView: View {
-    @State private var searchText = ""
-    var mangaObservable: MangaObservable
+    var mangaService: MangaService
+    @State var query: String = ""
 
     var body: some View {
         NavigationView {
-            List(mangaObservable.mangViewDatas, id: \.self) { item in
+            List(mangaService.mangaViewDatas, id: \.self) { item in
                         MangaCellView(mangaViewData: item)
-                            .listRowSeparator(.hidden)
+                            .listRowSeparator   (.hidden)
+                            .frame(maxWidth: .infinity)
+                            .onTapGesture {
+                                UIApplication.shared.open(URL(string: "https://mangadex.org/title/" + item.id)!)
+                            }
+
                     }
-                    .navigationTitle("Fruits")
-                    .searchable(text: $searchText, placement: .navigationBarDrawer(displayMode: .automatic))
+                    .navigationTitle("MangaDex")
+                    .listStyle(PlainListStyle())
+                    .searchable(text: $query, placement: .navigationBarDrawer(displayMode: .automatic))
                     .scrollContentBackground(.hidden)
-                }
+
+
+        }.task {
+            do {
+                try await mangaService.searchManga()
+            } catch {
+
+            }
+        }
     }
 }
 
 #Preview {
-    MangaListView(mangaObservable: MangaObservable(mangViewDatas: [MangaViewData.makeMock(), MangaViewData.makeMock(id: "test1")]))
+
+    MangaListView(
+        mangaService: MangaService(
+            urlSession: URLSessionHTTPClient(session: .shared),
+            baseURL: URL(string: "test")!,
+            mangaViewDatas: [MangaViewData.makeMock(id: "test1"),
+                             MangaViewData.makeMock(id: "test2")]
+        )
+    )
 }

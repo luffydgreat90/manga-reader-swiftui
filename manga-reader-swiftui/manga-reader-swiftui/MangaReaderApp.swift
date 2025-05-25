@@ -7,25 +7,26 @@
 
 import SwiftUI
 
-@main
-struct MangaReaderApp: App {
-
+final class MangaReaderAppViewModel {
     private let baseURL = URL(string: "https://api.mangadex.org")!
 
     private lazy var urlSession: URLSessionProtocol = {
         URLSessionHTTPClient(session: URLSession(configuration: .ephemeral))
     }()
 
-    private lazy var mangaService: MangaService = {
+    lazy var mangaService: MangaService = {
         MangaService(urlSession: urlSession,
                      baseURL: baseURL)
     }()
+}
 
-    private var mangaObserVable: MangaObservable = MangaObservable()
+@main
+struct MangaReaderApp: App {
+    private let viewModel: MangaReaderAppViewModel = MangaReaderAppViewModel()
 
     var body: some Scene {
         WindowGroup {
-            MangaListView(mangaObserVable: mangaObserVable)
+            MangaListView(mangaService: viewModel.mangaService)
         }
     }
 }
