@@ -14,25 +14,31 @@ struct MangaListView: View {
     @State var query: String = ""
     @State private var task: Task<Void, Never>?
 
+    private let openURL: (URL?) -> Void
+
+    init(mangaService: MangaService,
+         openURL: @escaping (URL?) -> Void) {
+        self.mangaService = mangaService
+        self.openURL = openURL
+    }
+
     var body: some View {
         NavigationView {
             List(mangaService.mangaViewDatas, id: \.self) { item in
-                        MangaCellView(mangaViewData: item)
-                            .listRowSeparator   (.hidden)
-                            .frame(maxWidth: .infinity)
-                            .onTapGesture {
-                                UIApplication.shared.open(URL(string: "https://mangadex.org/title/" + item.id)!)
-                            }
-
-                    }
-                    .navigationTitle("MangaDex")
-                    .listStyle(PlainListStyle())
-                    .searchable(text: $query)
-                    .onChange(of: query, { _, newValue in
-                        searchManga(query:newValue)
-                    })
-                    .scrollContentBackground(.hidden)
-                    .animation(.easeInOut, value: mangaService.mangaViewDatas)
+                MangaCellView(mangaViewData: item) {
+                    let url = URL(string: "https://mangadex.org/title/" + item.id)
+                    openURL(url)
+                }.listRowSeparator(.hidden)
+                    .frame(maxWidth: .infinity) .listRowBackground(Color.clear)
+                }
+                .navigationTitle("MangaDex")
+                .listStyle(PlainListStyle())
+                .searchable(text: $query)
+                .onChange(of: query, { _, newValue in
+                    searchManga(query: newValue)
+                })
+                .scrollContentBackground(.hidden)
+                .animation(.easeInOut, value: mangaService.mangaViewDatas)
         }.task {
             searchManga(query: "")
         }
@@ -52,13 +58,14 @@ struct MangaListView: View {
 }
 
 #Preview {
-
     MangaListView(
         mangaService: MangaService(
             urlSession: URLSessionHTTPClient(session: .shared),
             baseURL: URL(string: "test")!,
             mangaViewDatas: [MangaViewData.makeMock(id: "test1"),
                              MangaViewData.makeMock(id: "test2", title: "one piece")]
-        )
+        ), openURL: { _ in
+
+        }
     )
 }
