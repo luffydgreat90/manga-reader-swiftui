@@ -18,16 +18,15 @@ struct MangaCellView: View {
                     .foregroundStyle(.white)
 
                 Text(mangaViewData.description)
-                    .font(.subheadline)
+                    .font(.caption)
                     .foregroundStyle(.white)
             }
 
-        }.padding()
-            .frame(minWidth: 0,
-                   maxWidth: .infinity)
-            .background(.black.gradient)
-            .clipShape(.rect(cornerRadius: 10))
-            .padding()
+        }
+        .padding()
+        .frame(minWidth: 0,maxWidth: .infinity)
+        .background(.black.gradient)
+        .clipShape(.rect(cornerRadius: 10))
     }
 }
 

@@ -32,8 +32,7 @@ struct MangaListView: View {
                         searchManga(query:newValue)
                     })
                     .scrollContentBackground(.hidden)
-
-
+                    .animation(.easeInOut, value: mangaService.mangaViewDatas)
         }.task {
             searchManga(query: "")
         }
