@@ -18,7 +18,6 @@ struct MangaCellView: View {
     }
 
     var body: some View {
-
         VStack(
             alignment: .trailing,
             spacing: 8

@@ -8,10 +8,6 @@
 import Foundation
 
 enum MangaMapper {
-    enum MapError: Error {
-        case invalid
-    }
-
     private struct Result: Decodable {
         let data: [Manga]
     }

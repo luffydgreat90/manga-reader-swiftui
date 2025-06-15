@@ -10,35 +10,37 @@ import Observation
 
 @MainActor
 struct MangaListView: View {
-    @Bindable var mangaService: MangaService
+    @EnvironmentObject var mangaService: MangaService
     @State var query: String = ""
     @State private var task: Task<Void, Never>?
+    private let debounceDelay: UInt64 = 300_000_000 // 300ms debounce
 
     private let openURL: (URL?) -> Void
 
-    init(mangaService: MangaService,
-         openURL: @escaping (URL?) -> Void) {
-        self.mangaService = mangaService
+    init(openURL: @escaping (URL?) -> Void) {
         self.openURL = openURL
     }
 
     var body: some View {
         NavigationView {
             List(mangaService.mangaViewDatas, id: \.self) { item in
-                MangaCellView(mangaViewData: item) {
-                    let url = URL(string: "https://mangadex.org/title/" + item.id)
-                    openURL(url)
-                }.listRowSeparator(.hidden)
-                    .frame(maxWidth: .infinity) .listRowBackground(Color.clear)
+                NavigationLink(destination: MangaDetailView(mangaViewData: item)) {
+                    MangaCellView(mangaViewData: item, onTapDescription: {
+                        
+                    })
                 }
-                .navigationTitle("MangaDex")
-                .listStyle(PlainListStyle())
-                .searchable(text: $query)
-                .onChange(of: query, { _, newValue in
-                    searchManga(query: newValue)
-                })
-                .scrollContentBackground(.hidden)
-                .animation(.easeInOut, value: mangaService.mangaViewDatas)
+                .listRowSeparator(.hidden)
+                .frame(maxWidth: .infinity)
+                .listRowBackground(Color.clear)
+            }
+            .navigationTitle("MangaDex")
+            .listStyle(PlainListStyle())
+            .searchable(text: $query)
+            .onChange(of: query, { _, newValue in
+                searchManga(query: newValue)
+            })
+            .scrollContentBackground(.hidden)
+            .animation(.easeInOut, value: mangaService.mangaViewDatas)
         }.task {
             searchManga(query: "")
         }
@@ -47,7 +49,7 @@ struct MangaListView: View {
     private func searchManga(query: String) {
         task?.cancel()
         task = Task {
-            try? await Task.sleep(nanoseconds: 300_000_000)
+            try? await Task.sleep(nanoseconds: debounceDelay)
             do {
                 try await mangaService.searchManga(search: query)
             } catch {
@@ -58,14 +60,13 @@ struct MangaListView: View {
 }
 
 #Preview {
-    MangaListView(
-        mangaService: MangaService(
-            urlSession: URLSessionHTTPClient(session: .shared),
-            baseURL: URL(string: "test")!,
-            mangaViewDatas: [MangaViewData.makeMock(id: "test1"),
-                             MangaViewData.makeMock(id: "test2", title: "one piece")]
-        ), openURL: { _ in
-
-        }
+    let mangaService =  MangaService(
+        urlSession: URLSessionHTTPClient(session: .shared),
+        baseURL: URL(string: "test")!,
+        mangaViewDatas: [MangaViewData.makeMock(id: "test1"),
+                         MangaViewData.makeMock(id: "test2", title: "one piece")]
     )
+
+    MangaListView(openURL: { _ in })
+        .environmentObject(mangaService)
 }

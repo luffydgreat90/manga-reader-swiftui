@@ -7,30 +7,14 @@
 
 import SwiftUI
 
-final class MangaReaderAppViewModel {
-    private let baseURL: URL
-
-    init(baseURL: URL = URL(string: "https://api.mangadex.org")!) {
-        self.baseURL = baseURL
-    }
-
-    private lazy var urlSession: URLSessionProtocol = {
-        URLSessionHTTPClient(session: URLSession(configuration: .ephemeral))
-    }()
-
-    lazy var mangaService: MangaService = {
-        MangaService(urlSession: urlSession,
-                     baseURL: baseURL)
-    }()
-
-}
-
 @main
 struct MangaReaderApp: App {
-    private let viewModel: MangaReaderAppViewModel
+    @StateObject private var mangaService: MangaService
 
     init() {
-        self.viewModel = MangaReaderAppViewModel()
+        let urlSession = URLSessionHTTPClient(session: URLSession(configuration: .ephemeral))
+        let url = URL(string: "https://api.mangadex.org")!
+        _mangaService = StateObject(wrappedValue: MangaService(urlSession: urlSession, baseURL: url))
     }
 
     private func openURL(url: URL?) {
@@ -41,9 +25,8 @@ struct MangaReaderApp: App {
     var body: some Scene {
         WindowGroup {
             MangaListView(
-                mangaService: viewModel.mangaService,
                 openURL: openURL
-            )
+            ).environmentObject(mangaService)
         }
     }
 }
