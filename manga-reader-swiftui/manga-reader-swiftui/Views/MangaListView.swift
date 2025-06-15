@@ -22,7 +22,7 @@ struct MangaListView: View {
     }
 
     var body: some View {
-        NavigationView {
+        NavigationStack {
             List(mangaService.mangaViewDatas, id: \.self) { item in
                 NavigationLink(destination: MangaDetailView(mangaViewData: item)) {
                     MangaCellView(mangaViewData: item, onTapDescription: {

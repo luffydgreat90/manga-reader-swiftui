@@ -40,4 +40,14 @@ final class MangaService: ObservableObject {
         let mapped = try FeederMapper.map(data: result.0, httpResponse: result.1)
         await MainActor.run { self.feederViewDatas = mapped }
     }
+
+    func getFeederImages(chapterId: String) async throws -> [URL] {
+        let result = try await urlSession.get(from: MangaEndPoint.getFeederImages(chapterId: chapterId).url(baseURL: baseURL))
+
+        return try FeederImagesMapper.map(data: result.0, httpResponse: result.1)
+    }
+
+    func clearFeeder() async {
+        await MainActor.run { self.feederViewDatas = [] }
+    }
 }

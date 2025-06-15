@@ -12,14 +12,20 @@ struct MangaDetailView: View {
     let mangaViewData: MangaViewData
     
     var body: some View {
-        NavigationView {
+        NavigationStack {
             List(mangaService.feederViewDatas, id: \.self) { item in
-                FeederCellView(feederViewData: item)
+                NavigationLink(destination: ChapterView(feederViewData: item)) {
+                    FeederCellView(feederViewData: item)
+                }
             }
             .listStyle(PlainListStyle())
             .navigationTitle(mangaViewData.title)
         }.task {
             try? await mangaService.getFeeder(id: mangaViewData.id)
+        }.onDisappear {
+            Task {
+                await  mangaService.clearFeeder()
+            }
         }
     }
 }
@@ -32,6 +38,9 @@ struct MangaDetailView: View {
         feederViewDatas: [FeederViewData.makeMock(),FeederViewData.makeMock(id: "2", title: "title 2")]
     )
 
-    MangaDetailView(mangaViewData: MangaViewData.makeMock(id: "test1"))
-        .environmentObject(mangaService)
+    NavigationStack {
+        MangaDetailView(mangaViewData: MangaViewData.makeMock(id: "test1"))
+            .environmentObject(mangaService)
+    }
 }
+
