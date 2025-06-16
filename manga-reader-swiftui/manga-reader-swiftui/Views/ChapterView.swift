@@ -14,11 +14,20 @@ struct ChapterView: View {
     @State var selected: Int = 0
 
     var body: some View {
-        ZStack {
-            if images.count > 0 {
-                AsyncImage(url: images[selected])
+        VStack {
+            Text(feederViewData.title)
+            if !images.isEmpty{
+                AsyncImage(url: images[selected]) { image in
+                    image
+                        .resizable()
+                        .aspectRatio(contentMode: .fit)
+                        .clipped()
+                } placeholder: {
+                    ProgressView()
+                }
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
             } else {
-                Text("Loading...")
+                ProgressView()
             }
         }.task {
             do {
