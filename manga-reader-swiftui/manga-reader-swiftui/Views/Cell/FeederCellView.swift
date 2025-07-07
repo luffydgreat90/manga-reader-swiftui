@@ -20,7 +20,7 @@ struct FeederCellView: View {
                 .frame(
                     maxWidth: .infinity,
                     alignment: .leading)
-            
+
             Text(feederViewData.chapterVolume)
                 .font(.caption)
                 .lineLimit(3)

@@ -10,7 +10,7 @@ import SwiftUI
 struct MangaDetailView: View {
     @EnvironmentObject private var mangaService: MangaService
     let mangaViewData: MangaViewData
-    
+
     var body: some View {
         NavigationStack {
             List(mangaService.feederViewDatas, id: \.self) { item in
@@ -30,12 +30,11 @@ struct MangaDetailView: View {
     }
 }
 
-
 #Preview {
     let mangaService =  MangaService(
         urlSession: URLSessionHTTPClient(session: .shared),
         baseURL: URL(string: "test")!,
-        feederViewDatas: [FeederViewData.makeMock(),FeederViewData.makeMock(id: "2", title: "title 2")]
+        feederViewDatas: [FeederViewData.makeMock(), FeederViewData.makeMock(id: "2", title: "title 2")]
     )
 
     NavigationStack {
@@ -43,4 +42,3 @@ struct MangaDetailView: View {
             .environmentObject(mangaService)
     }
 }
-

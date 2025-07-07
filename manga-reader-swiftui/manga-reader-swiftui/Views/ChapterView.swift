@@ -16,7 +16,7 @@ struct ChapterView: View {
     var body: some View {
         VStack {
             Text(feederViewData.title)
-            if !images.isEmpty{
+            if !images.isEmpty {
                 AsyncImage(url: images[selected]) { image in
                     image
                         .resizable()
@@ -32,7 +32,7 @@ struct ChapterView: View {
         }.task {
             do {
                 images = try await mangaService.getFeederImages(chapterId: feederViewData.id)
-            }catch {
+            } catch {
                 // no-op
             }
         }
