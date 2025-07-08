@@ -12,30 +12,24 @@ struct MangaDetailView: View {
     let mangaViewData: MangaViewData
 
     var body: some View {
-        NavigationStack {
-            List(mangaService.feederViewDatas, id: \.self) { item in
-                NavigationLink(destination: ChapterView(feederViewData: item)) {
-                    FeederCellView(feederViewData: item)
-                }
-            }
-            .listStyle(PlainListStyle())
-            .navigationTitle(mangaViewData.title)
-        }.task {
-            try? await mangaService.getFeeder(id: mangaViewData.id)
-        }.onDisappear {
-            Task {
-                await  mangaService.clearFeeder()
+        VStack {
+            HStack {
+                Text(mangaViewData.description)
             }
         }
+        .frame(
+            maxWidth: .infinity,
+            maxHeight: .infinity,
+            alignment: .top
+        )
+        .navigationTitle(mangaViewData.title)
     }
 }
 
 #Preview {
     let mangaService =  MangaService(
         urlSession: URLSessionHTTPClient(session: .shared),
-        baseURL: URL(string: "test")!,
-        feederViewDatas: [FeederViewData.makeMock(), FeederViewData.makeMock(id: "2", title: "title 2")]
-    )
+        baseURL: URL(string: "test")!)
 
     NavigationStack {
         MangaDetailView(mangaViewData: MangaViewData.makeMock(id: "test1"))

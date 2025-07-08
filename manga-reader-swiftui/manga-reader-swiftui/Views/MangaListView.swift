@@ -53,7 +53,7 @@ struct MangaListView: View {
             do {
                 try await mangaService.searchManga(search: query)
             } catch {
-
+                
             }
         }
     }

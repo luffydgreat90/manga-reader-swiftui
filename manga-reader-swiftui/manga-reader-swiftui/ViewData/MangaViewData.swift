@@ -11,9 +11,9 @@ struct MangaViewData: Hashable {
     let id: String
     let title: String
     let description: String
-    let coverId: String?
     let tags: [TagsViewData]
     let contentRating: String?
+    let coverUrl: URL?
 }
 
 struct TagsViewData: Hashable {
@@ -26,9 +26,9 @@ extension MangaViewData {
             id: id,
             title: title,
             description: description,
-            coverId: nil,
             tags: [],
-            contentRating: "test"
+            contentRating: "test",
+            coverUrl: URL(string: "https://uploads.mangadex.org/covers/8f3e1818-a015-491d-bd81-3addc4d7d56a/26dd2770-d383-42e9-a42b-32765a4d99c8.png")
         )
     }
 }

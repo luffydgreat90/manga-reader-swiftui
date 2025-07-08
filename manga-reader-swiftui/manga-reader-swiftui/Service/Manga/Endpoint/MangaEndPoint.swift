@@ -14,7 +14,7 @@ enum MangaEndPoint {
     func url(baseURL: URL) -> URL? {
         switch self {
         case let .get(search):
-            return URL(string: "\(baseURL.absoluteString)/manga?title=\(search)")
+            return URL(string: "\(baseURL.absoluteString)/manga?title=\(search)&includes[]=cover_art")
         case .getFeeder(let id):
             return URL(string: "\(baseURL.absoluteString)/manga/\(id)/feed?translatedLanguage[]=en")
         case .getFeederImages(let chapterId):

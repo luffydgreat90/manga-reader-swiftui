@@ -23,26 +23,14 @@ struct MangaCellView: View {
             spacing: 8
         ) {
             HStack {
+                AsyncImage(url: mangaViewData.coverUrl)
+
                 Text(mangaViewData.title)
                     .font(.title3.bold())
                     .frame(
                         maxWidth: .infinity,
                         alignment: .leading
                     )
-
-                Spacer()
-                Button(
-                    action: {
-
-                    }) {
-                        Image(systemName: "star")
-                            .resizable()
-                            .frame(
-                                width: 15,
-                                height: 15
-                            )
-                            .clipShape(Circle())
-                    }
             }
 
             Text(mangaViewData.description)

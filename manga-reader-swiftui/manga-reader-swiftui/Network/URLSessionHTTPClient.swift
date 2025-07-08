@@ -36,6 +36,6 @@ final class URLSessionHTTPClient: URLSessionProtocol {
             throw LoadError.failed
         }
 
-        return( result.0, response)
+        return(result.0, response)
     }
 }
