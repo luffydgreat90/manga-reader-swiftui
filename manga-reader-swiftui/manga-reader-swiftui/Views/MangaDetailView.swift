@@ -13,16 +13,25 @@ struct MangaDetailView: View {
 
     var body: some View {
         VStack {
+            Text(mangaViewData.title).font(.title.bold())
+                .lineLimit(3)
+
             HStack {
+                AsyncImage(url: mangaViewData.coverUrl)
+                    .frame(maxWidth: 150, maxHeight: 180)
+                    .scaledToFill()
+                    .clipped()
+                    .clipShape(RoundedRectangle(cornerRadius: 10))
                 Text(mangaViewData.description)
+                    .lineLimit(6)
             }
+            
         }
         .frame(
             maxWidth: .infinity,
             maxHeight: .infinity,
             alignment: .top
-        )
-        .navigationTitle(mangaViewData.title)
+        ).padding()
     }
 }
 

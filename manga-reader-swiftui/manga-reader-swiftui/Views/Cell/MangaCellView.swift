@@ -9,12 +9,12 @@ import SwiftUI
 
 struct MangaCellView: View {
     let mangaViewData: MangaViewData
-    let onTapDescription: () -> Void
+    let onTapCell: () -> Void
 
     init(mangaViewData: MangaViewData,
-         onTapDescription: @escaping () -> Void) {
+         onTapCell: @escaping () -> Void) {
         self.mangaViewData = mangaViewData
-        self.onTapDescription = onTapDescription
+        self.onTapCell = onTapCell
     }
 
     var body: some View {
@@ -24,13 +24,18 @@ struct MangaCellView: View {
         ) {
             HStack {
                 AsyncImage(url: mangaViewData.coverUrl)
+                    .frame(maxWidth: 150, maxHeight: 150)
+                    .scaledToFill()
+                    .clipped()
+                    .clipShape(RoundedRectangle(cornerRadius: 10))
 
                 Text(mangaViewData.title)
-                    .font(.title3.bold())
+                    .font(.subheadline.bold())
                     .frame(
                         maxWidth: .infinity,
                         alignment: .leading
                     )
+                    .lineLimit(3)
             }
 
             Text(mangaViewData.description)
@@ -40,9 +45,7 @@ struct MangaCellView: View {
                 .frame(
                     maxWidth: .infinity,
                     alignment: .leading
-                ).onTapGesture {
-                    onTapDescription()
-                }
+                )
         }
         .padding()
         .frame(
@@ -59,14 +62,16 @@ struct MangaCellView: View {
         )
         .foregroundStyle(
             .white
-        )
+        ).onTapGesture {
+            onTapCell()
+        }
 
     }
 }
 
 #Preview {
     MangaCellView(
-        mangaViewData: MangaViewData.makeMock(title: "Hellsing: The Legend of a Vampire Hunter"), onTapDescription: {
+        mangaViewData: MangaViewData.makeMock(title: "Hellsing: The Legend of a Vampire Hunter"), onTapCell: {
 
     })
 }

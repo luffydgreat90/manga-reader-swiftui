@@ -13,6 +13,7 @@ struct MangaListView: View {
     @EnvironmentObject var mangaService: MangaService
     @State var query: String = ""
     @State private var task: Task<Void, Never>?
+    @State private var path = NavigationPath()
     private let debounceDelay: UInt64 = 300_000_000 // 300ms debounce
 
     private let openURL: (URL?) -> Void
@@ -22,13 +23,11 @@ struct MangaListView: View {
     }
 
     var body: some View {
-        NavigationStack {
+        NavigationStack(path: $path) {
             List(mangaService.mangaViewDatas, id: \.self) { item in
-                NavigationLink(destination: MangaDetailView(mangaViewData: item)) {
-                    MangaCellView(mangaViewData: item, onTapDescription: {
-
-                    })
-                }
+                MangaCellView(mangaViewData: item, onTapCell: {
+                    path.append(item)
+                })
                 .listRowSeparator(.hidden)
                 .frame(maxWidth: .infinity)
                 .listRowBackground(Color.clear)
@@ -38,6 +37,9 @@ struct MangaListView: View {
             .searchable(text: $query)
             .onChange(of: query, { _, newValue in
                 searchManga(query: newValue)
+            })
+            .navigationDestination(for: MangaViewData.self, destination: { mangaViewData in
+                MangaDetailView(mangaViewData: mangaViewData)
             })
             .scrollContentBackground(.hidden)
             .animation(.easeInOut, value: mangaService.mangaViewDatas)

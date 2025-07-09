@@ -28,7 +28,7 @@ extension MangaViewData {
             description: description,
             tags: [],
             contentRating: "test",
-            coverUrl: URL(string: "https://uploads.mangadex.org/covers/8f3e1818-a015-491d-bd81-3addc4d7d56a/26dd2770-d383-42e9-a42b-32765a4d99c8.png")
+            coverUrl: URL(string: "https://uploads.mangadex.org/covers/8f3e1818-a015-491d-bd81-3addc4d7d56a/26dd2770-d383-42e9-a42b-32765a4d99c8.png?150.jpg")
         )
     }
 }
